@@ -18,7 +18,7 @@ public class JdbcExpenseRepository implements ExpenseRepository {
     private final Category category;
 
     private static final String INSERT_SQL = "INSERT INTO expense (description, amount, expense_date) VALUES (?, ?, ?)";
-    private static final String SELECT_SQL = "SELECT id, description, amount, expense_date FROM expense";
+    private static final String SELECT_SQL = "SELECT id, description, amount, expense_date FROM expense ORDER BY amount DESC";
     private static final String AVG_SQL = "SELECT AVG(amount) AS average FROM expense";
 
     public JdbcExpenseRepository(DbSettings settings, Category category) {
