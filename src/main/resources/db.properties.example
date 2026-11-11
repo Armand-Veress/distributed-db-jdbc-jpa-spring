@@ -3,3 +3,9 @@
 auto.url = jdbc:postgresql://localhost:5432/expenses_auto
 auto.user = expenses_lab03
 auto.password =
+
+# db2: expenses_food
+
+food.url = jdbc:postgresql://localhost:5432/expenses_food
+food.user = expenses_lab03
+food.password =

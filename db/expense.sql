@@ -1,4 +1,4 @@
--- db1: expenses_auto
+-- expense table
 
 CREATE TABLE expense(
     id           BIGINT         GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
