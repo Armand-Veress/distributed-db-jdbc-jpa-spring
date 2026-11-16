@@ -11,5 +11,6 @@
 
     <modules>
         <module>console-app-auto-food</module>
+        <module>spring-service-bills</module>
     </modules>
 </project>
