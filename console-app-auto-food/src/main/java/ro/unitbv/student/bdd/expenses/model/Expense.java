@@ -23,7 +23,7 @@ public class Expense {
     @Transient
     private Category category;
 
-    public Expense() {}
+    protected Expense() {}
 
     public Expense(String description, BigDecimal amount, LocalDate date, Category category) {
         this.description = description;
