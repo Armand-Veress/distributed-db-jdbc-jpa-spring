@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bills</title>
+</head>
+<body>
+<h2>Bills</h2>
+<table>
+    <tr>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Date</th>
+    </tr>
+    <tr th:each="expense : ${expenses}">
+        <td th:text="${expense.description}">description</td>
+        <td th:text="${expense.amount}">amount</td>
+        <td th:text="${expense.date}">date</td>
+    </tr>
+    <tfoot>
+        <tr>
+            <td colspan="3">Average: <span th:text="${average} ?: 'no bills yet'">0</span></td>
+        </tr>
+    </tfoot>
+</table>
+</body>
+</html>
