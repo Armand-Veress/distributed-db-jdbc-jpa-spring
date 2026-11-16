@@ -56,21 +56,33 @@ public class ConsoleMenu {
     }
 
     private void showAllExpenses() {
-        List<Expense> expenses = service.findAllSortedByAmountDesc();
-        if (expenses.isEmpty()) {
-            System.out.println("No expenses found.");
-            return;
+        ExpenseService.ExpensesResult result = service.findAllSortedByAmountDesc();
+
+        for (Expense expense : result.expenses()) {
+            System.out.println(expense);
+        }
+        for (Category category : result.unavailable()) {
+            System.out.println("[!] " + category + " database unavailable");
         }
 
-        for (Expense expense : expenses) {
-            System.out.println(expense);
+        if (result.expenses().isEmpty()) {
+            System.out.println("No expenses found.");
         }
     }
 
     private void showAverages() {
         Map<Category, Optional<BigDecimal>> averages = service.averagesByCategory();
         for(Category c : Category.values()) {
-            System.out.println(c.name() + ": " + averages.get(c));
+            Optional<BigDecimal> average = averages.get(c);
+            String text;
+            if (average == null) {
+                text = "source unavailable";
+            } else if (average.isEmpty()) {
+                text = "no expenses";
+            } else {
+                text = average.get().toString();
+            }
+            System.out.println(c.name() + ": " + text);
         }
     }
 

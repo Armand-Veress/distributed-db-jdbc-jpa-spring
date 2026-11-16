@@ -3,12 +3,14 @@ package ro.unitbv.student.bdd.expenses.service;
 import ro.unitbv.student.bdd.expenses.model.Category;
 import ro.unitbv.student.bdd.expenses.model.Expense;
 import ro.unitbv.student.bdd.expenses.repository.ExpenseRepository;
+import ro.unitbv.student.bdd.expenses.repository.RepositoryException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
 public class ExpenseService {
+    public record ExpensesResult(List<Expense> expenses, List<Category> unavailable) {}
     private final Map<Category, ExpenseRepository> repositories = new EnumMap<>(Category.class);
 
     public ExpenseService(List<ExpenseRepository> repositories) {
@@ -31,19 +33,30 @@ public class ExpenseService {
         return expense;
     }
 
-    public List<Expense> findAllSortedByAmountDesc() {
+    public ExpensesResult findAllSortedByAmountDesc() {
         List<Expense> all = new ArrayList<>();
+        List<Category> unavailable = new ArrayList<>();
+
         for (ExpenseRepository repository : repositories.values()) {
-            all.addAll(repository.findAll());
+            try {
+                all.addAll(repository.findAll());
+            } catch (RepositoryException e) {
+                unavailable.add(repository.getCategory());
+            }
         }
+
         all.sort(Comparator.comparing(Expense::getAmount).reversed());
-        return all;
+        return new ExpensesResult(all, unavailable);
     }
 
     public Map<Category, Optional<BigDecimal>> averagesByCategory() {
         Map<Category, Optional<BigDecimal>> averages = new EnumMap<>(Category.class);
         for (ExpenseRepository repository : repositories.values()) {
-            averages.put(repository.getCategory(), repository.getAverage());
+            try {
+                averages.put(repository.getCategory(), repository.getAverage());
+            } catch (RepositoryException e) {
+                // source unavailable
+            }
         }
         return averages;
     }
