@@ -6,6 +6,7 @@ import ro.unitbv.student.bdd.expenses.model.Expense;
 import ro.unitbv.student.bdd.expenses.repository.ExpenseRepository;
 import ro.unitbv.student.bdd.expenses.repository.jdbc.JdbcExpenseRepository;
 import ro.unitbv.student.bdd.expenses.repository.jpa.JpaExpenseRepository;
+import ro.unitbv.student.bdd.expenses.repository.rest.RestExpenseRepository;
 import ro.unitbv.student.bdd.expenses.service.ExpenseService;
 import ro.unitbv.student.bdd.expenses.ui.ConsoleMenu;
 
@@ -15,8 +16,9 @@ public class Main {
     public static void main(String[] args) {
         ExpenseRepository auto = new JdbcExpenseRepository(DbSettings.load("auto"), Category.AUTO);
         JpaExpenseRepository food = new JpaExpenseRepository(DbSettings.load("food"), Category.FOOD);
+        ExpenseRepository bills = new RestExpenseRepository("http://localhost:8080/api/expenses", Category.BILLS);
 
-        ExpenseService service = new ExpenseService(List.of(auto, food));
+        ExpenseService service = new ExpenseService(List.of(auto, food, bills));
         new ConsoleMenu(service).run();
 
         food.close();
